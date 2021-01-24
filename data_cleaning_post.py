@@ -2,6 +2,7 @@
 import json
 import pandas as pd
 import random
+import os
 
 from transformers import AutoTokenizer
 
@@ -16,8 +17,6 @@ filenames = tmp.strip().split('\n')
 posts = []
 post_content = []
 comments = []
-positive_label_post = []
-positive_label_comment = []
 
 for filename in filenames:
     with open(filename, 'r') as f:
@@ -77,13 +76,7 @@ print(max(df_clean_2, key=len))
 filename = 'post_1202_v1'
 with open(f"data/{filename}.json", 'w', encoding='utf-8') as f:
     f.write(json.dumps(df_clean_2, ensure_ascii=False))
-# with open(f"data/{filename}_original.json", 'w', encoding='utf-8') as f:
-#     f.write(json.dumps(df_clean, ensure_ascii=False))
+with open(f"data/{filename}_original.json", 'w', encoding='utf-8') as f:
+    f.write(json.dumps(df_clean, ensure_ascii=False))
 # with open(f"data/{filename}_removed.json", 'w', encoding='utf-8') as f:
 #     f.write(json.dumps(df_clean, ensure_ascii=False))
-
-# %%
-tokenizer = AutoTokenizer.from_pretrained("bert-base-chinese")
-analyze_tokenization('日, .清', tokenizer)
-# %%
-tokens_tensor = tokenizer(df_clean, return_tensors="pt", padding=True) # pt for pytorch

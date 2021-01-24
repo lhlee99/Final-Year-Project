@@ -2,6 +2,7 @@
 import json
 import pandas as pd
 import random
+import os
 
 from transformers import AutoTokenizer
 
@@ -108,10 +109,3 @@ with open(f"data/{filename}_original.json", 'w', encoding='utf-8') as f:
     f.write(json.dumps(original, ensure_ascii=False))
 with open(f"data/{filename}_removed.json", 'w', encoding='utf-8') as f:
     f.write(json.dumps(removed, ensure_ascii=False))
-
-# %%
-tokenizer = AutoTokenizer.from_pretrained("bert-base-chinese")
-#%%
-analyze_tokenization('周庭判咗未？ 我無去聽', tokenizer)
-# %%
-tokens_tensor = tokenizer(df_clean, return_tensors="pt", padding=True) # pt for pytorch

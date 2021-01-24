@@ -111,7 +111,6 @@ def do_clustering(data, k ,algorithm, args, kwds):
         adjustedLabelList = [x+1 for x in labelList]
         output['clusterLabel'] = adjustedLabelList
         f.write(json.dumps(output))
-        f.close()
 
     print("Clustering finished ", str(algorithm.__name__) + "\n");
 

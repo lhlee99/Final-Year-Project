@@ -17,6 +17,7 @@ for i in range(len(pretrained_models)):
     generate_class_vector(
         df,
         model_name=pretrained_models[i],
-        output_name=f'output/{output_name[i]}_output_1202_v5.pt')
+        output_name=f'output/{output_name[i]}_output_1202_v5.pt',
+        full=False)
 
 # %%

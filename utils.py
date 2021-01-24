@@ -11,39 +11,15 @@ from zipfile import ZipFile
 import torch
 from transformers import AutoTokenizer, AutoModelForMaskedLM, BertModel
 
-#%% SAMPLING
-"""
-sample_idx = random.sample(np.arange(0, len(df)).tolist(), 3000)
-df = [df[idx] for idx in sample_idx]
-positive_label = [positive_label[idx] for idx in sample_idx]
-
-with open("output/labels.json", 'w') as f:
-	f.write(json.dumps(positive_label))
-
-print('-'*10)
-print("Sample: ")
-print(f'number of comments + postname: {len(df)}')
-print(f'positive labels: {len(positive_label)}')
-print('-'*10)
-"""
-
-
-#%% TESTING
-"""
-tokens_tensor = tokenizer(df[0:16], return_tensors="pt", padding=True) # pt for pytorch
-with torch.no_grad():
-	output = model(**tokens_tensor)
-output.pooler_output.shape
-# output.hidden_states[0][:,0,:].shape
-"""
 #%%
 def generate_class_vector(df, model_name="bert-base-chinese", batch_size=None, output_name='output/rename.pt', full=False, full_interval=2):
     """Generate class vectors with BERT and save the tensor in output."""
     # zip full output
-    if os.path.exists("tmp"):
-        os.system('cmd /k "rm -R tmp"')
-    os.mkdir('tmp')
-    zipObj = ZipFile(output_name.replace('.pt', f'_full.zip'), 'w')
+    if full:
+        if os.path.exists("tmp"):
+            os.system('cmd /k "rm -R tmp"')
+        os.mkdir('tmp')
+        zipObj = ZipFile(output_name.replace('.pt', f'_full.zip'), 'w')
 
     if torch.cuda.is_available():
         device = torch.device('cuda:0')
@@ -88,24 +64,26 @@ def generate_class_vector(df, model_name="bert-base-chinese", batch_size=None, o
         else:
             concat_output = torch.cat([concat_output, output.pooler_output], 0)
 
-        if hidden == None:
-            hidden = output.last_hidden_state
-        else:
-            hidden = torch.cat([hidden, output.last_hidden_state], 0)
+        if full:
+            if hidden == None:
+                hidden = output.last_hidden_state
+            else:
+                hidden = torch.cat([hidden, output.last_hidden_state], 0)
 
-        if i % (log_interval * full_interval) == 0 and i != 0:
-            tmp_name = output_name.replace('.pt', f'_full_{count}.pt')
-            tmp_name = tmp_name.replace('output/', 'tmp/')
-            torch.save(concat_output, tmp_name)
-            zipObj.write(tmp_name)
-            os.remove(tmp_name)
-            print(f"hidden: {hidden.shape}, saved at {tmp_name}")
-            count += 1
-            del hidden
-            hidden = None
+            if i % (log_interval * full_interval) == 0 and i != 0:
+                tmp_name = output_name.replace('.pt', f'_full_{count}.pt')
+                tmp_name = tmp_name.replace('output/', 'tmp/')
+                torch.save(concat_output, tmp_name)
+                zipObj.write(tmp_name)
+                os.remove(tmp_name)
+                print(f"hidden: {hidden.shape}, saved at {tmp_name}")
+                count += 1
+                del hidden
+                hidden = None
 
         if i % log_interval == 0:
             print(f'Batch: {i+1} [{(i+1)*batch_size}/{data_length}] {round(time.time() - start, 2)}s {(i+1)*batch_size*1.0/data_length * 100}%')
+
     print(f"Pooler Output: {concat_output.shape}")
     torch.save(concat_output, output_name)
     if hidden != None:
@@ -114,9 +92,9 @@ def generate_class_vector(df, model_name="bert-base-chinese", batch_size=None, o
         zipObj.write(tmp_name)
         os.remove(tmp_name)
         print(f"hidden: {hidden.shape}, saved at {tmp_name}")
-
-    os.rmdir("tmp")
-    zipObj.close()
+    if full:
+        os.rmdir("tmp")
+        zipObj.close()
 
 #%% split text function
 def split_text(text, max_length):
