@@ -279,8 +279,8 @@ class PostScraper():
         logging.info(f"File saved at {targetFile}")
 
 if __name__ == '__main__':
-    #frequency = sys.argv[1]
-    frequency = 4
+    frequency = sys.argv[1]
+    #frequency = 4
     scraper = PostScraper()
     try:
         scraper.scrape(frequency)
