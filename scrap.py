@@ -67,7 +67,7 @@ class PostScraper():
         FREQUENT = int(fre)
         now = datetime.now()
         nowStr = now.strftime("%Y%m%d-%H%M")
-        targetFile = 'vm_dataset/' + nowStr + '.json' if sys.platform == 'linux' else 'Dataset/' + nowStr + '.json'
+        targetFile = 'vm_dataset/' + nowStr + '.json' if sys.platform == 'linux' else 'data/' + nowStr + '.json'
 
         file = open(targetFile, 'w+', encoding='utf-8')
 
@@ -280,6 +280,7 @@ class PostScraper():
 
 if __name__ == '__main__':
     frequency = sys.argv[1]
+    #frequency = 4
     scraper = PostScraper()
     try:
         scraper.scrape(frequency)

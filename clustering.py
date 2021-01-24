@@ -122,7 +122,7 @@ if __name__ == "__main__":
         map_location=lambda storage, loc: storage.cuda()
     else:
         map_location='cpu'
-    data = np.array(torch.load('base_output_1202_v3.pt', map_location=map_location))[:, :]
+    data = np.array(torch.load('output/wwm_output_1202_v5.pt', map_location=map_location))[:, :]
     print("Input data count = {}, features : {}".format(data.shape[0], data.shape[1]));
     
     while True:   
