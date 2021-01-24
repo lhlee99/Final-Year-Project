@@ -4,14 +4,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 #%% Read result
-with open("KMeans_40.json", 'r', encoding='utf-8') as f:
+with open("./report/KMeans.json", 'r', encoding='utf-8') as f:
     result = json.loads(f.read())
     print(result.keys())
     print(len(result['clusterLabel']))
 number_of_cluster = int(result['numberOfCluster'])
 #%% Read dataset
 
-with open("cleaned_1202_v5.json", 'r', encoding='utf-8') as f:
+with open("./data/cleaned_1202_v5.json", 'r', encoding='utf-8') as f:
     data = json.loads(f.read())
     print(len(data))
 
@@ -30,7 +30,7 @@ df = pd.DataFrame(df)
 df.columns = ['content', 'cluster']
 print(df.dtypes)
 df.head()
-df.to_excel("data_label_base.xlsx")
+df.to_excel("./report/data_label.xlsx")
 
 #%% plot # of comment in each cluster
 fig = plt.figure()
@@ -39,7 +39,7 @@ plt.title('distribution')
 plt.xlabel('cluster no.')
 plt.ylabel('number of elements')
 plt.show()
-fig.savefig('./' + "distri.png")
+fig.savefig("./report/distri.png")
 
 # %%
 all_freq = []
@@ -67,7 +67,7 @@ for cluster_idx in range(1, number_of_cluster + 1):
     all_freq.append(tmp_freq)
 
 # %%
-with open("frequentWord.txt", 'w', encoding='utf-8') as f:
+with open("./report/frequentWord.txt", 'w', encoding='utf-8') as f:
 
     for i, freq in enumerate(all_freq):
         f.write(f'cluster: {i+1}')

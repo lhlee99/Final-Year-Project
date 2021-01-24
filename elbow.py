@@ -20,13 +20,13 @@ if __name__ == "__main__":
     print(map_location)
 
     x="wwm"
-    data = np.array(torch.load(x+'_output_post_1202_v1.pt', map_location=map_location).cpu())
+    data = np.array(torch.load('./output/'+ x +'_output_1202_v5.pt', map_location=map_location).cpu())
     
     print("Input data count = {}, features : {}".format(data.shape[0], data.shape[1]));
     
     print("Determining k ....");
     
-    y=10
+    y=5
     # k means determine k
     distortions = []
     k_range = range(3,y)
@@ -40,5 +40,5 @@ if __name__ == "__main__":
     plt.xlabel('k')
     plt.ylabel('Distortion')
     plt.title('The Elbow Method showing the optimal k')
-    #plt.show()
-    fig2.savefig('./' + "elbow_" + x +"_"+ str(y) + ".png")
+    plt.show()
+    fig2.savefig('./report/' + "elbow_" + x +"_"+ str(y) + ".png")
