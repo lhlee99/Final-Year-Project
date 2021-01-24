@@ -67,8 +67,8 @@ def draw_graph(algorithm, centroids, labels, dataframe):
     plt.yticks(fontsize=9)
     plt.xlabel('pca1', fontsize=9)
     plt.ylabel('pca2', fontsize=9)
-    figManager = plt.get_current_fig_manager()
-    figManager.window.showMaximized()
+    # figManager = plt.get_current_fig_manager()
+    # figManager.window.showMaximized()
     #fig.tight_layout()
     plt.show()
     fig.savefig(outputDir + '/' + algorithm + ".png");
